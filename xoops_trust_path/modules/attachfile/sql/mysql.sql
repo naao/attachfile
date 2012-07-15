@@ -8,4 +8,4 @@ CREATE TABLE attach (
   KEY (attach_id),
   KEY (module_dirname),
   KEY (target_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;

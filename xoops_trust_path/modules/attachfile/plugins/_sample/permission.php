@@ -1,4 +1,14 @@
 <?php
+require_once XOOPS_TRUST_PATH.'/modules/attachfile/class/AttachfilePluginAbstract.class.php' ;
+
+// a class for attachfile plugin
+class bulletinAttachfilePlugin extends AttachfilePluginAbstract{
+
+function bulletinAttachfilePlugin( $parentObj )
+{
+	$this->parentObj = & $parentObj;
+}
+
 
 // ===========================================================================
 // The permission file is necessary in each module.
@@ -7,10 +17,6 @@
 //
 // -- argument --
 // 
-// $mydirname			: attachfile's dirname in XOOPS_ROOT_PATH
-// $module_dirname		: target module's dirname in XOOPS_ROOT_PATH
-// $mytrustdirname		: attachfile's dirname in XOOPS_TRUST_PATH
-// $targettrustdirname	: target module's dirname in XOOPS_TRUST_PATH
 // $target_id			: target mosule's contents id (target to attach)
 // 
 // -- return value --
@@ -19,14 +25,15 @@
 // false				: deny access
 // ===========================================================================
 
-function attachfile_check_upload_permission_plugin( $mydirname , $module_dirname , $mytrustdirname , $targettrustdirname , $target_id )
+function attachfile_check_upload_permission_plugin( $target_id )
 {
 	return true;
 }
 
-function attachfile_check_download_permission_plugin( $mydirname , $module_dirname , $mytrustdirname , $targettrustdirname , $target_id )
+function attachfile_check_download_permission_plugin( $target_id )
 {
 	return true;
 }
+} // end class
 
 ?>

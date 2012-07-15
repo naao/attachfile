@@ -1,16 +1,15 @@
 <?php
 
+require_once dirname( dirname( __FILE__ ) ) .'/class/AttachfilePlugin.class.php';
+
 function attachfile_check_upload_permission( $mydirname , $module_dirname , $target_id )
 {
 	$mytrustdirname = basename( dirname( dirname( __FILE__ ) ) ) ;
 	$targettrustdirname = attachfile_get_targettrustdirname( $module_dirname ) ;
 
-	$permission_inc = dirname( dirname( __FILE__ ) )."/plugins/$targettrustdirname/permission.php" ;
-	if( ! file_exists( $permission_inc ) ) {
-		return _MD_ATTACHFILE_ERR_PLUGINNOTFOUND.' ('.$targettrustdirname.')' ;
-	}
-	include_once $permission_inc ;
-	if( ! attachfile_check_upload_permission_plugin( $mydirname , $module_dirname , $mytrustdirname , $targettrustdirname , $target_id ) ) {
+	$pluginObj = & AttachfilePlugin::getInstance ( $mydirname ,  $module_dirname , $targettrustdirname );
+	
+	if( ! $pluginObj->mPlug->attachfile_check_upload_permission_plugin( $target_id ) ) {
 		return _MD_ATTACHFILE_ERR_CANTUPLOAD.' ('.$module_dirname.')' ;
 	}
 	return null ;
@@ -21,12 +20,9 @@ function attachfile_check_download_permission( $mydirname , $module_dirname , $t
 	$mytrustdirname = basename( dirname( dirname( __FILE__ ) ) ) ;
 	$targettrustdirname = attachfile_get_targettrustdirname( $module_dirname ) ;
 
-	$permission_inc = dirname( dirname( __FILE__ ) )."/plugins/$targettrustdirname/permission.php" ;
-	if( ! file_exists( $permission_inc ) ) {
-		return _MD_ATTACHFILE_ERR_PLUGINNOTFOUND.' ('.$targettrustdirname.')' ;
-	}
-	include_once $permission_inc ;
-	if( ! attachfile_check_download_permission_plugin( $mydirname , $module_dirname , $mytrustdirname , $targettrustdirname , $target_id ) ) {
+	$pluginObj = & AttachfilePlugin::getInstance ( $mydirname ,  $module_dirname , $targettrustdirname );
+
+	if( ! $pluginObj->mPlug->attachfile_check_download_permission_plugin( $target_id ) ) {
 		return _MD_ATTACHFILE_ERR_CANTDOWNLOAD.' ('.$module_dirname.')' ;
 	}
 	return null ;

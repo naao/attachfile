@@ -11,9 +11,9 @@ $constpref = '_MI_' . strtoupper( $mydirname ) ;
 
 $modversion['name'] = constant($constpref.'_NAME') ;
 $modversion['description'] = constant($constpref.'_DESC') ;
-$modversion['version'] = 1.02 ;
+$modversion['version'] = 1.03 ;
 $modversion['credits'] = "t_yamo at unknown-artifacts.info";
-$modversion['author'] = "t_yamo" ;
+$modversion['author'] = "t_yamo hacked by naao" ;
 $modversion['help'] = "" ;
 $modversion['license'] = "GPL" ;
 $modversion['official'] = 0 ;

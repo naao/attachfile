@@ -47,7 +47,12 @@ function attachfile_display_download( $mydirname , $params )
 		return ;
 	}
 
-	$module_dirname = $xoopsModule->getVar('dirname') ;
+	if ( isset( $params['target_dirname'] ) ) {
+		$module_dirname = $params['target_dirname'] ;
+	} else {
+		$module_dirname = $xoopsModule->getVar('dirname') ;
+	}
+
 	$target_id = intval( $params['target_id'] ) ;
 
 	// check download permission
