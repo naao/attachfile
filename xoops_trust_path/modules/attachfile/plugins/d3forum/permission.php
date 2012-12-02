@@ -274,7 +274,7 @@ function &d3forum_get_comment_object( $forum_dirname, $external_link_format )
 	@list( $params['external_dirname'] , $params['classname'] , $params['external_trustdirname'] ) 
 		= explode( '::' , $external_link_format ) ;
 
-	$this->d3comObj =& D3commentObj::getInstance ( $params ) ;
+	$this->d3comObj =& attachfileD3commentObj::getInstance ( $params ) ;
 	
 	return $this->d3comObj->d3comObj ;
 }
@@ -291,22 +291,25 @@ function attachfileD3commentObj($params )
 //  $params['forum_dirname'] , $params['external_dirname'] , $params['classname'] , $params['external_trustdirname']
 {
 	//$this->mPlug = & $parentObj;
+	$forum_trustdirpath = XOOPS_TRUST_PATH.'/modules/d3forum' ;
 	$mytrustdirpath = XOOPS_TRUST_PATH.'/modules/'.$params['external_trustdirname'] ;
 
 	if( empty( $params['classname'] ) ) {
 		include_once $mytrustdirpath.'/class/D3commentAbstract.class.php' ;
-		$this->d3comObj =& new D3commentAbstract( $forum_dirname , '' ) ;
+		$this->d3comObj = new D3commentAbstract( $params['forum_dirname'] , '' ) ;
+		return ;
 	}
 
 	// search the class file
 	$class_bases = array(
 		XOOPS_ROOT_PATH.'/modules/'.$params['external_dirname'].'/class' ,
-		XOOPS_TRUST_PATH.'/modules/'.$params['external_trustdirname'].'/class' ,
-		XOOPS_TRUST_PATH.'/modules/d3forum/class' ,
+		$mytrustdirpath.'/class' ,
+		$forum_trustdirpath.'/class' ,
 	) ;
 
 	foreach( $class_bases as $class_base ) {
 		if( file_exists( $class_base.'/'.$params['classname'].'.class.php' ) ) {
+			require_once $forum_trustdirpath.'/class/D3commentAbstract.class.php' ;
 			require_once $class_base.'/'.$params['classname'].'.class.php' ;
 			break ;
 		}
@@ -314,13 +317,15 @@ function attachfileD3commentObj($params )
 
 	// check the class
 	if( ! $params['classname'] || ! class_exists( $params['classname'] ) ) {
-		include_once $mytrustdirpath.'/class/D3commentAbstract.class.php' ;
-		$this->d3comObj =& new attachfileD3commentAbstract( $params['forum_dirname'] , $params['external_dirname'] ) ;
+		include_once $forum_trustdirpath.'/class/D3commentAbstract.class.php' ;
+		$this->d3comObj = new D3commentAbstract( $params['forum_dirname'] , $params['external_dirname'] ) ;
+		return ;
 	}
 
-	$this->d3comObj =& new $params['classname']( $params['forum_dirname'] , 
+	$this->d3comObj = new $params['classname']( $params['forum_dirname'] , 
 			$params['external_dirname'] , $params['external_trustdirname'] ) ;
 }
+
 
 function & getInstance( $params )
 {
@@ -328,7 +333,7 @@ function & getInstance( $params )
 
 	static $instance ;
 	if( ! isset( $instance[$external_dirname] ) ) {
-		$instance[$external_dirname] = & new attachfileD3commentObj( $params ) ;
+		$instance[$external_dirname] = new attachfileD3commentObj( $params ) ;
 	}
 	return $instance[$external_dirname] ;
 }
